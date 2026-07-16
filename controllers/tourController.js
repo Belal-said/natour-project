@@ -18,6 +18,17 @@ exports.checkID = (req, res, next, val) => {
   next();
 };
 
+// check body
+exports.checkBody = (req, res, next) => {
+  if (!Object.hasOwn(req.body, "name") || !Object.hasOwn(req.body, "price")) {
+    return res.status(400).json({
+      status: 'fail',
+      message: 'missing name or price'
+    })
+  }
+  next();
+}
+
 // get request method under routing
 exports.getAllTours = (req, res) => {
   // req, res function here is called route handler
@@ -44,14 +55,12 @@ exports.getTour = (req, res) => {
 
 // create tour
 exports.createTour = (req, res) => {
-  console.log(req.body);
-
   const newId = tours[tours.length - 1].id + 1;
   const newTour = Object.assign({ id: newId }, req.body);
   tours.push(newTour);
 
   fs.writeFile(
-    `${__dirname}/dev-data/data/tours-simple.json`,
+    `${__dirname}/../dev-data/data/tours-simple.json`,
     JSON.stringify(tours), // Converts a JavaScript object into a JSON string.
     (err) => {
       res.status(201).json({
