@@ -4,6 +4,19 @@ const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`),
 );
 
+// check Id 
+exports.checkID = (req, res, next, val) => {
+  const id = req.params.id * 1; // Converts id from string to number
+  const tour = tours.find((el) => el.id === id);
+
+  if (!tour) {
+    res.status(404).json({
+      status: "fail",
+      message: "Invalid ID",
+    });
+  }
+  next();
+};
 
 // get request method under routing
 exports.getAllTours = (req, res) => {
@@ -20,16 +33,6 @@ exports.getAllTours = (req, res) => {
 
 // get one tour
 exports.getTour = (req, res) => {
-  const id = req.params.id * 1; // Converts id from string to number
-  const tour = tours.find((el) => el.id === id);
-
-  if (!tour) {
-    res.status(404).json({
-      status: "fail",
-      message: "Tour Not found",
-    });
-  }
-
   res.status(200).json({
     // res.json sends a json response to the client.
     status: "success",
