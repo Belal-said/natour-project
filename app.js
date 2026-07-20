@@ -1,7 +1,7 @@
 // Requiring express moduel ( package )
 const express = require("express");
-const app = express();
 const morgan = require("morgan");
+const app = express();
 
 const tourRouter = require("./routes/tourRoutes.js");
 const userRouter = require("./routes/userRoutes.js");
@@ -10,8 +10,8 @@ const userRouter = require("./routes/userRoutes.js");
 // if (process.env.NODE_ENV === 'development') {
 //   app.use(morgan('dev'));
 // }
+//app.use(express.static(`${__dirname}/public`));
 
-app.use(express.static(`${__dirname}/public`));
 app.use(express.json());
 app.use((req, res, next) => {
   console.log("Hello from the middleware");
