@@ -1,34 +1,14 @@
 const fs = require("fs");
 const Tour = require("./../models/tourModel.js");
 
-// const tours = JSON.parse(
-//   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`),
-// );
 
-// check Id
-// exports.checkID = (req, res, next, val) => {
-//   const id = req.params.id * 1; // Converts id from string to number
-//   const tour = tours.find((el) => el.id === id);
-
-//   if (!tour) {
-//     res.status(404).json({
-//       status: "fail",
-//       message: "Invalid ID",
-//     });
-//   }
-//   next();
-// };
-
-// check body
-// exports.checkBody = (req, res, next) => {
-//   if (!Object.hasOwn(req.body, "name") || !Object.hasOwn(req.body, "price")) {
-//     return res.status(400).json({
-//       status: 'fail',
-//       message: 'missing name or price'
-//     })
-//   }
-//   next();
-// }
+// Aliasing
+exports.getTopFiveTours = (req, res, next) => {
+  req.query.limit = 6;
+  req.query.sort = "-ratingsAverage,price";
+  req.query.fields = "name,price,ratingsAverage,summary,difficulty";
+  next();
+};
 
 // get request method under routing
 exports.getAllTours = async (req, res) => {
@@ -42,7 +22,6 @@ exports.getAllTours = async (req, res) => {
     // 1B) Advanced Filtering
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
-    // console.log(JSON.parse(queryStr));
 
     let query = Tour.find(JSON.parse(queryStr));
 
@@ -57,7 +36,7 @@ exports.getAllTours = async (req, res) => {
     // 3) Field Limiting
     if (req.query.fields) {
       const fields = req.query.fields.split(",").join(" ");
-      query = query.select("name duration price");
+      query = query.select(fields);
     } else {
       query = query.select("-__v");
     }
@@ -72,10 +51,10 @@ exports.getAllTours = async (req, res) => {
     if (req.query.page) {
       const numTours = await Tour.countDocuments();
       if (skip >= numTours) {
-        throw new Error('This page does not exist')
+        throw new Error("This page does not exist");
       }
     }
-    
+
     // Execute API
     const tours = await query;
 

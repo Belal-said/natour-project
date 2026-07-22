@@ -2,6 +2,9 @@ const express = require("express");
 const tourController = require("./../controllers/tourController.js");
 const router = express.Router();
 
+router
+  .route("/top-5-tours")
+  .get(tourController.getTopFiveTours, tourController.getAllTours);
 
 router
   .route("/")

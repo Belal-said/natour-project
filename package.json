@@ -11,13 +11,13 @@
   "license": "ISC",
   "dependencies": {
     "dotenv": "^17.4.2",
-    "eslint-plugin-react": "^7.37.5",
-    "express": "^5.2.1",
+    "eslint-plugin-react": ">=7.37.5",
+    "express": "^4.22.2",
     "mongoose": "^9.7.4",
     "morgan": "^1.11.0"
   },
   "devDependencies": {
-    "eslint": "^10.7.0",
+    "eslint": ">=10.7.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^5.5.6",
