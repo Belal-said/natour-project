@@ -50,6 +50,16 @@ exports.getAllTours = async (req, res) => {
     if (req.query.sort) {
       const sortBy = req.query.sort.split(",").join(" ");
       query = query.sort(sortBy);
+    } else {
+      query = query.sort('-createdAt');
+    }
+
+    // 3) Field Limiting
+    if (req.query.fields) {
+      const fields = req.query.fields.split(',').join(' ');
+      query = query.select('name duration price')
+    } else {
+      query = query.select('-__v')
     }
 
     // Execute API
