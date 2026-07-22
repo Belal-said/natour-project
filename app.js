@@ -11,7 +11,7 @@ const userRouter = require("./routes/userRoutes.js");
 //   app.use(morgan('dev'));
 // }
 //app.use(express.static(`${__dirname}/public`));
-
+app.set('query parser', 'extended')
 app.use(express.json());
 app.use((req, res, next) => {
   console.log("Hello from the middleware");
