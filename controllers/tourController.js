@@ -1,6 +1,6 @@
 const fs = require("fs");
 const Tour = require("./../models/tourModel.js");
-const APIFeatures = require('./../utils/apiFeatures.js')
+const APIFeatures = require("./../utils/apiFeatures.js");
 
 // Aliasing
 exports.getTopFiveTours = (req, res, next) => {
@@ -9,7 +9,6 @@ exports.getTopFiveTours = (req, res, next) => {
   req.query.fields = "name,price,ratingsAverage,summary,difficulty";
   next();
 };
-
 
 // get request method under routing
 exports.getAllTours = async (req, res) => {
@@ -106,6 +105,37 @@ exports.deleteTour = async (req, res) => {
     });
   } catch (err) {
     res.status(200).json({
+      status: "fail",
+      message: err,
+    });
+  }
+};
+
+exports.getToursStats = async (req, res) => {
+  try {
+    const stats = await Tour.aggregate([
+      {
+        $match: {
+          ratingsAverage: { $gte: 4.5 },
+        },
+        $group: {
+          _id: null,
+          avgRating: { $avg: '$ratingsAverage'},
+          avgPrice: { $avg: '$price'},
+          minPrice: { $min: '$price'},
+          maxPrice: { $max: '$price'},
+        },
+      },
+    ]);
+    console.log('Hi')
+    res.status(200).json({
+      status: 'success',
+      data: {
+        stats
+      }
+    })
+  } catch (err) {
+    res.status(404).json({
       status: "fail",
       message: err,
     });

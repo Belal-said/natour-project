@@ -7,6 +7,10 @@ router
   .get(tourController.getTopFiveTours, tourController.getAllTours);
 
 router
+  .route("/stats")
+  .get(tourController.getToursStats);
+
+router
   .route("/")
   .get(tourController.getAllTours)
   .post(tourController.createTour);
